@@ -1,23 +1,31 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.*;
 
+import net.jini.core.event.RemoteEventListener;
 import net.jini.space.JavaSpace;
 
 public class CreateTopic {
 	public static JavaSpace space;
 	String user;
 	Integer topicID;
+	
+	JFrame frmCreateTopic;
+
 	JLabel lblTopicName;
 	JButton btnCreateTopic;
 	JTextField txtTopicName;
 	JTextArea txtMessage;
 	JCheckBox chkPvtOpts;
-	
+	 
 	CreateTopic() {
-		JFrame frmCreateTopic = new JFrame("Create New Topic");
+		frmCreateTopic = new JFrame("Create New Topic");
 		lblTopicName = new JLabel("Please enter a topic name:");
 		txtTopicName = new JTextField(25);
 		txtMessage = new JTextArea(15,30);
@@ -41,6 +49,8 @@ public class CreateTopic {
 	    } 
 	 	
 		btnCreateTopic.addActionListener(new ActionListener() { 
+		private RemoteEventListener theStub;
+
 		public void actionPerformed(ActionEvent e) { 
 			String allowPvtMsg = "false";
 			String topicName = txtTopicName.getText();
@@ -88,13 +98,24 @@ public class CreateTopic {
 	            System.out.println("not writing");
 			}
 		  
+			DateFormat dateFormat = new SimpleDateFormat("HH:mm  dd/MM/yy");
+			Date date = new Date();
+			
+			
+			
+			
+			
 			try {
-	        	MessageObject mObj = new MessageObject(0, topicID, topicName, message);
+	        	MessageObject mObj = new MessageObject(0, topicID, user, message, dateFormat.format(date));
 	        	space.write(mObj, null, 1000000 * 60 * 3);		
 			} catch (Exception e2) {
 	            e2.printStackTrace();
 	            System.out.println("not writing");
 	        }	  
+			
+			 
+			
+			
 		} 
 		});
 		
@@ -104,14 +125,17 @@ public class CreateTopic {
 		frmCreateTopic.setVisible(true);
 	}
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	 
+	
+	
+	public static void main(String[] args) throws RemoteException {
+		if (System.getSecurityManager() == null) {
+			System.setSecurityManager(new SecurityManager());
+		}
+            
 		new CreateTopic();
-//		space = SpaceUtils.getSpace(); 
-//	    if (space == null){ 
-//	    	System.err.println("Failed to find the javaspace"); 
-//	        System.exit(1); 
-//	    }
 	}
+
+	
 
 }

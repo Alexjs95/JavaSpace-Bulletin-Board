@@ -10,4 +10,8 @@ public class LoggedInUser {
 		user = username;
 	}
 	
+	public void logout() {
+		user = null;
+	}
+	
 }

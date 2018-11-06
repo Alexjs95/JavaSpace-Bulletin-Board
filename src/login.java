@@ -10,13 +10,14 @@ import net.jini.space.JavaSpace;
 public class login extends JFrame {
 
 	public static JavaSpace space;
+	JFrame frmLogin;
 	JLabel lblUsername, lblPassword;
 	JTextField txtUsername;
 	JButton btnLogin, btnRegister;
 	JPasswordField txtPassword;
 	
 	login() {
-		JFrame frmLogin = new JFrame("Login");
+		frmLogin = new JFrame("Login");
 		lblUsername = new JLabel("Username: ");
 		txtUsername = new JTextField(20);
 		lblPassword = new JLabel("Password: ");
@@ -30,19 +31,18 @@ public class login extends JFrame {
 		frmLogin.add(txtPassword);
 		frmLogin.add(btnLogin);
 		frmLogin.add(btnRegister);	
+		
 		btnLogin.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) { 
 				btnLogin();
 			} 
 		});
 		
-		
 		btnRegister.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 				  btnRegister();
 			  } 
 			} );
-		
 		
 		frmLogin.setLayout(new FlowLayout());
 		frmLogin.setSize(400, 200);
@@ -76,8 +76,9 @@ public class login extends JFrame {
 					if ((Objects.equals(value.username, username)) && (Objects.equals(value.password, password))) {
 						LoggedInUser set = new LoggedInUser();
 						set.setUser(username);
+						dispose();
 						new Home();
-						// Close login form
+						frmLogin.dispose();
 					}
 				} else {
 					System.out.println("NOT LOGGED IN");
